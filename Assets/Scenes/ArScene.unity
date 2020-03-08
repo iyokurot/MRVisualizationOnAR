@@ -1595,5 +1595,29 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickBackScene
       objectReference: {fileID: 0}
+    - target: {fileID: 1059529662, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 987916205}
+    - target: {fileID: 1059529662, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickStateDefault
+      objectReference: {fileID: 0}
+    - target: {fileID: 1934427132, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 987916205}
+    - target: {fileID: 1934427132, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickStateDefault
+      objectReference: {fileID: 0}
+    - target: {fileID: 1228992288, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 987916205}
+    - target: {fileID: 1228992288, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickStateDefault
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65d4bce731a2b7c44bd4fa5c7571f74d, type: 3}

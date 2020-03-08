@@ -12,6 +12,7 @@ public class MqttEulerController : MonoBehaviour {
     public Subject<string> OnMessageReceived { get; private set; } = new Subject<string> ();
     private string mqttHost = "192.168.1.6";
     async void Start () {
+        mqttHost = SelectController.MqttURL;
         var factory = new MqttFactory ();
         mqttClient = factory.CreateMqttClient ();
         string topic = SelectController.topicData.topic;

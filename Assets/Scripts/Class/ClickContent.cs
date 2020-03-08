@@ -10,6 +10,8 @@ public class ClickContent : MonoBehaviour, IPointerClickHandler {
     [SerializeField]
     GameObject selectPanel;
     [SerializeField]
+    Image selectImage;
+    [SerializeField]
     Text nameText;
     public void OnPointerClick (PointerEventData eventData) {
         //クリックされたオブジェクトからIDを取得
@@ -21,6 +23,7 @@ public class ClickContent : MonoBehaviour, IPointerClickHandler {
         //selectController.SetSelectId (5);
         selectController.SetTopicData (data);
         selectPanel.SetActive (true);
+        selectImage.sprite = data.image;
         nameText.text = data.name;
     }
 }

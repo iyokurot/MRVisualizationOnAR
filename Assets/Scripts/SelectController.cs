@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MQTTnet;
+using MQTTnet.Client;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,6 +10,9 @@ using UnityEngine.UI;
 public class SelectController : MonoBehaviour {
     private string serverURL = "http://192.168.1.4:5000/";
     public static string ServerURL { get; private set; }
+    IMqttClient mqttClient;
+    private string mqttURL = "192.168.1.4";
+    public static string MqttURL { get; private set; }
     private Subject<string> subject = new Subject<string> ();
     public static TopicData topicData = new TopicData ();
     [SerializeField]
@@ -21,10 +26,21 @@ public class SelectController : MonoBehaviour {
     Text responseText; //server res
     [SerializeField]
     InputField serverUrlText; //server url inputfield
+    [SerializeField]
+    Text responseTextMqtt; //mqtt res
+    [SerializeField]
+    InputField mqttUrlText; //mqtt url inputfield
+    [SerializeField]
+    Sprite itoyuSprite;
+    [SerializeField]
+    Sprite dummySprite;
 
     void Start () {
         if (ServerURL == null) {
             ServerURL = serverURL;
+        }
+        if (MqttURL == null) {
+            MqttURL = mqttURL;
         }
         responseText.text = "ResponseCode:0";
         serverUrlText.text = ServerURL;
@@ -35,9 +51,22 @@ public class SelectController : MonoBehaviour {
             //リストを成型後、Content追加
             foreach (TopicData topic in topicList) {
                 GameObject topicObject = Instantiate (contentObject, scrollContent.transform);
+                if ("itoyuNineAxis" == topic.topic) {
+                    Debug.Log ("itoyu");
+                    topicObject.GetComponent<Image> ().sprite = itoyuSprite;
+                    topic.image = itoyuSprite;
+                } else {
+                    topicObject.GetComponent<Image> ().sprite = dummySprite;
+                    topic.image = dummySprite;
+                }
                 topicObject.GetComponent<ContentPropaty> ().Data = topic;
+
             }
         });
+        responseTextMqtt.text = "未接続";
+        mqttUrlText.text = MqttURL;
+        //MQTT
+        ConnectMqtt ();
     }
     IEnumerator GetTopicData () {
         errorPanel.SetActive (false);
@@ -62,6 +91,29 @@ public class SelectController : MonoBehaviour {
             }
         }
     }
+    async void ConnectMqtt () {
+        //
+        var factory = new MqttFactory ();
+        mqttClient = factory.CreateMqttClient ();
+
+        var options = new MqttClientOptionsBuilder ()
+            .WithTcpServer (MqttURL, 1883)
+            .WithClientId ("Unity.client.subscriber") //Guid.NewGuid ().ToString ())
+            //.WithCredentials ("your_MQTT_username", "your_MQTT_password")
+            //.WithTls ()
+            .Build ();
+
+        mqttClient.Connected += async (s, e) => {
+            //Debug.Log ("MQTTブローカに接続しました");
+            await mqttClient.SubscribeAsync (
+                new TopicFilterBuilder ()
+                .WithTopic ("itoyuNineAxis")
+                .Build ());
+            //Debug.Log ("指定したトピックをSubscribeしました");
+            responseTextMqtt.text = "接続成功";
+        };
+        await mqttClient.ConnectAsync (options);
+    }
     public void SetTopicData (TopicData data) {
         topicData = data;
     }
@@ -75,6 +127,13 @@ public class SelectController : MonoBehaviour {
         //
         ServerURL = serverUrlText.text;
         StartCoroutine (GetTopicData ());
+    }
+    public async void OnClickReConectMqtt () {
+        //
+        MqttURL = mqttUrlText.text;
+        //responseTextMqtt.text = "接続中";
+        await mqttClient.DisconnectAsync ();
+        ConnectMqtt ();
     }
 
 }
